@@ -7,10 +7,10 @@
 #include "var.h"
 #include "command.h"
 
-Node *tmp;
+Node *root;
 
 /* 属性操作类型 */
-Node *opr(int name, int num, ...);
+Node *createNode(int name, int num, ...);
 Node *set_index(int value);
 Node *set_content(int value);
 void freeNode(Node *p);
@@ -18,7 +18,19 @@ int exeNode(Node *p, int signal);
 
 int yylexeNode(void);
 void yyerror(char *s);
+void hash_init(HashNode * table[], int size);
+void printTree(Node *node);
 
+extern char* yytext;
+extern int col;
+extern FILE* yyin;
+extern FILE* yyout;
+extern int yylineno;
+extern int yylex(void);
+extern HashNode *var_local[HASHSIZE];
+extern HashNode *var_local_SorA[HASHSIZE];	/* whether it is scalar or array */
+extern HashNode *var_local_GorP[HASHSIZE];	/* general local or param */
+extern HashNode *var_global_SorA[HASHSIZE];	/* general local or param *
 /*int var[26]; [> 变量数组 <]*/
 
 %}
@@ -62,18 +74,18 @@ void yyerror(char *s);
 %%
 
 program
-    : declaration_list { exeNode($1, 0); freeNode($1); }
+    : declaration_list { exeNode($1, 0); printTree($1); freeNode($1); }
     ;
 
 declaration_list
-    : declaration_list declaration { $$ = opr(';', 2, $1, $2); }
+    : declaration_list declaration { $$ = createNode(';', 2, $1, $2); }
     | declaration { $$ = $1; }
     ;
 
 declaration
     : var_declaration 
         { 
-            $$  = opr(GLOBAL_VAR, 1, $1);
+            $$  = createNode(GLOBAL_VAR, 1, $1);
         }
     | fun_declaration { $$ = $1; }
     ;
@@ -84,14 +96,14 @@ var_declaration
             Node *tmp1;
             /* here to insert new var declaration */
             tmp1 = set_index($2);
-            $$ = opr(VAR, 2, $1, tmp1);
+            $$ = createNode(VAR, 2, $1, tmp1);
         }
     | type_specifier IDENTIFIER '[' CONSTANT ']' ';'
         {
             Node *tmp1, *tmp2;
             tmp1 = set_index($2);
             tmp2 = set_content($4);
-            $$ = opr(VAR, 3, $1, tmp1, tmp2);
+            $$ = createNode(VAR, 3, $1, tmp1, tmp2);
         }
     ;
 
@@ -105,11 +117,11 @@ fun_declaration
         {
             Node *tmp1;
             tmp1 = set_index($2);
-            $$ = opr(FUNC, 3, $1, tmp1, $4);
+            $$ = createNode(FUNC, 3, $1, tmp1, $4);
         }
 
     | compound_stmt 
-        { $$ = opr(FUNC, 1, $1); }
+        { $$ = createNode(FUNC, 1, $1); }
     ;
 
 params
@@ -118,7 +130,7 @@ params
     ;
 
 params_list
-    : params_list ',' param { $$ = opr(',', 2, $1, $3); }
+    : params_list ',' param { $$ = createNode(',', 2, $1, $3); }
     | param { $$ = $1; }
     ;
 
@@ -128,29 +140,29 @@ param
             Node *tmp1;
             /* here to insert new var declaration */
             tmp1 = set_index($2);
-            $$ = opr(PARAM, 2, $1, tmp1);
+            $$ = createNode(PARAM, 2, $1, tmp1);
         }
     | type_specifier IDENTIFIER '[' ']'
         {
             Node *tmp1;
             /* here to insert new var declaration */
             tmp1 = set_index($2);
-            $$ = opr(PARAM, 3, $1, tmp1, NULL);
+            $$ = createNode(PARAM, 3, $1, tmp1, NULL);
         }
     ;
 
 compound_stmt
     : '{' local_declarations statement_list '}' 
-        { $$ = opr('{', 2, $2, $3); }
+        { $$ = createNode('{', 2, $2, $3); }
     ;
 
 local_declarations
-    : local_declarations var_declaration { $$ = opr(';', 2, $1, $2); }
+    : local_declarations var_declaration { $$ = createNode(';', 2, $1, $2); }
     | /* empty */ { $$ = NULL; }
     ;
 
 statement_list
-    : statement_list statement { $$ = opr(';', 2, $1, $2); }
+    : statement_list statement { $$ = createNode(';', 2, $1, $2); }
     | /* empty */ { $$ = NULL; }
     ;
 
@@ -168,24 +180,24 @@ expression_stmt
     ;
 
 selection_stmt
-    : IF '(' expression ')' statement { $$ = opr(IF, 2, $3, $5); }
+    : IF '(' expression ')' statement { $$ = createNode(IF, 2, $3, $5); }
     | IF '(' expression ')' statement ELSE statement
-        { $$ = opr(IF, 3, $3, $5, $7); }
+        { $$ = createNode(IF, 3, $3, $5, $7); }
     ;
 
 iteration_stmt
-    : WHILE '(' expression ')' statement { $$ = opr(WHILE, 2, $3, $5); }
+    : WHILE '(' expression ')' statement { $$ = createNode(WHILE, 2, $3, $5); }
     ;
 
 return_stmt
-    : RETURN ';' { $$ = opr(RETURN, 0); }
-    | RETURN expression ';' { $$ = opr(RETURN, 1, $2); }
+    : RETURN ';' { $$ = createNode(RETURN, 0); }
+    | RETURN expression ';' { $$ = createNode(RETURN, 1, $2); }
     ;
 
 expression
     : var '=' expression
         {
-            $$ = opr('=', 2, $1, $3);
+            $$ = createNode('=', 2, $1, $3);
         }
     | simple_expression { $$ = $1; }
     ;
@@ -196,14 +208,14 @@ var
         {
             Node *tmp1;
             tmp1 = set_index($1);
-            $$ = opr('[', 2, tmp1, $3); 
+            $$ = createNode('[', 2, tmp1, $3); 
         }
     ;
 
 simple_expression
     : additive_expression relop additive_expression
         {
-            $$ = opr($2, 2, $1, $3); 
+            $$ = createNode($2, 2, $1, $3); 
         }
     | additive_expression { $$ = $1; }
     ;
@@ -220,7 +232,7 @@ relop
 additive_expression
     : additive_expression addop term
         {
-            $$ = opr($2, 2, $1, $3);
+            $$ = createNode($2, 2, $1, $3);
         }
     | term
         { 
@@ -236,7 +248,7 @@ addop
 term
     : term mulop factor
         {
-            $$ = opr($2, 2, $1, $3);
+            $$ = createNode($2, 2, $1, $3);
         }
     | factor { $$ = $1; }
     ;
@@ -258,7 +270,7 @@ call
         { 
             Node *tmp1;
             tmp1 = set_index($1);
-            $$ = opr(CALL, 2, tmp1, $3);
+            $$ = createNode(CALL, 2, tmp1, $3);
         }
     ;
 
@@ -268,7 +280,7 @@ args
     ;
 
 arg_list
-    : arg_list ',' expression { $$ = opr(',', 2, $1, $3); }
+    : arg_list ',' expression { $$ = createNode(',', 2, $1, $3); }
     | expression { $$ = $1; }
     ;
 
@@ -307,7 +319,7 @@ Node *set_index(int value)
 	return p;
 }
 
-Node *opr(int name, int num, ...) 
+Node *createNode(int name, int num, ...) 
 {
 	va_list valist;
 	Node *p;
@@ -330,6 +342,12 @@ Node *opr(int name, int num, ...)
 		
 	va_end(valist);
 	return p;
+}
+
+void printTree(Node *node){
+    if(node){
+        string Name = node
+    }
 }
 
 void freeNode(Node *p) 

@@ -13,7 +13,12 @@ IS                      ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 #include "y.tab.h"
 #include "hash.h"
 
+int col = 0;
+int row = 1;
+int yywrap(void);
+void comment(void);
 void count(void);
+int check_type(void);
 %}
 
 %%
@@ -124,7 +129,9 @@ L?\"(\\.|[^\\"\n])*\"	{ count(); return(STRING_LITERAL); }
 "?"			{ count(); return('?'); }
 
 [ \t\v\n\f]		{ count(); }
-.			{ /* Add code to complain about unmatched characters */ }
+.				{
+					printf("unmatched characters. row = %d, col = %d\n", row, col);
+				}
 
 %%
 
@@ -144,23 +151,24 @@ void comment(void)
 			return;
 		prev = c;
 	}
-	error("unterminated comment");
+	printf("unterminated comment");
+	exit(1);
 }
 
-
-int column = 0;
 
 void count(void)
 {
 	int i;
 
 	for (i = 0; yytext[i] != '\0'; i++)
-		if (yytext[i] == '\n')
-			column = 0;
+		if (yytext[i] == '\n'){
+			col = 0;
+			row++;
+		}
 		else if (yytext[i] == '\t')
-			column += 8 - (column % 8);
+			col += 8 - (col % 8);
 		else
-			column++;
+			col++;
 
 	/*ECHO; */
 }

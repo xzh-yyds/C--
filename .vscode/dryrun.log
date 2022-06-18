@@ -1,0 +1,7 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/lightning/coding/C-Minus-Compiler'
+./parser < test/test2.c > testfile.asm
+nasm -f elf -g -F stabs testfile.asm -o testfile.o
+ld -m elf_i386 -o testfile testfile.o
+make: Leaving directory '/home/lightning/coding/C-Minus-Compiler'
+ 

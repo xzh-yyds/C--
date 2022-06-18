@@ -19,6 +19,7 @@ typedef struct NodeTag {
 		int index;	/* 索引 */
 		OpNode op;	/* 操作符对象 */
 	};
+	char nodename[20];
 } Node;
 
 #endif	/*  */

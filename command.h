@@ -46,8 +46,6 @@
 #define FUNC_PRE "F_"
 #define GDATA_PRE "D_"
 
-char strbucket[MAX_STR_LENGTH];
-
 void output(const char *str);
 static int func_is_main(int funcname);
 static void getvarstr(char *varstr, int offset);

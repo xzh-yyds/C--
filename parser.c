@@ -4,10 +4,16 @@
 #include "y.tab.h"
 #include "hash.h"
 #include "var.h"
+#include "command.h"
 int offset_local;
 int offset_param;
 int current_func;
 int in_func_declaration;
+HashNode *var_local[HASHSIZE];
+HashNode *var_local_SorA[HASHSIZE];	/* whether it is scalar or array */
+HashNode *var_local_GorP[HASHSIZE];	/* general local or param */
+HashNode *var_global_SorA[HASHSIZE];	/* general local or param */
+
 int exeNode(Node * p, int signal) 
 {
 	HashNode * node, *s_or_a, *g_or_p;

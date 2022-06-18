@@ -2,7 +2,7 @@ make lex
 make yacc
 make
 
-./parser < test.c > test.asm
+./parser < test/test2.c > testfile.asm
 
-nasm -f elf test.asm
-ld -s -o test test.o
+nasm -f elf testfile.asm
+ld -s -o testfile testfile.o

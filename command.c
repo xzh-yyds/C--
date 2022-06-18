@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <stdlib.h>
 #include "command.h"
 #include "hash.h"
+
+char strbucket[MAX_STR_LENGTH];
 
 void output(const char *str)
 {
