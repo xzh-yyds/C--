@@ -345,9 +345,7 @@ Node *createNode(int name, int num, ...)
 }
 
 void printTree(Node *node){
-    if(node){
-        string Name = node
-    }
+    printf("node");
 }
 
 void freeNode(Node *p) 
