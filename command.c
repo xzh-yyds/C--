@@ -59,7 +59,10 @@ void code_jmp(int labelno)
 void code_pop(int reg)
 {
 	char regstr[REGSTR_LENGTH];
-	getregstr(regstr, reg);
+	if(getregstr(regstr, reg) == -1){
+		printf("getregstr error\n");
+		exit(1);
+	}
 
 	sprintf(strbucket, "%s\t%s", POP, regstr);
 	output(strbucket);
@@ -72,7 +75,10 @@ void code_lea_global(int target, int addr, int offset)
 	char offreg[REGSTR_LENGTH];
 	char tarreg[REGSTR_LENGTH];
 	array = getregstr(offreg, offset);
-	getregstr(tarreg, target);
+	if(getregstr(tarreg, target) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	if (array == -1) {	/* not array */
 		sprintf(strbucket, "%s\t%s, [%s%d]", LEA, tarreg, GDATA_PRE,
@@ -89,7 +95,10 @@ void code_lea_local(int target, int var)
 	char t_reg[REGSTR_LENGTH];
 	char s_var[VARSTR_LENGTH];
 
-	getregstr(t_reg, target);
+	if(getregstr(t_reg, target) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	};
 	getvarstr(s_var, var);
 
 	sprintf(strbucket, "%s\t%s, %s", LEA, t_reg, s_var);
@@ -104,8 +113,14 @@ void code_move_reg(int target, int source)
 	if (target == source)
 		return;
 
-	getregstr(t_reg, target);
-	getregstr(s_reg, source);
+	if(getregstr(t_reg, target) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
+	if(getregstr(s_reg, source) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	sprintf(strbucket, "%s\t%s, %s", MOV, t_reg, s_reg);
 	output(strbucket);
@@ -114,7 +129,10 @@ void code_move_reg(int target, int source)
 void code_push_mem(int addr, int offset)
 {
 	char regstr[REGSTR_LENGTH];
-	getregstr(regstr, offset);
+	if(getregstr(regstr, offset) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	sprintf(strbucket, "%s\t%s [%s%d+%s]", PUSH, VARSIZE,
 		GDATA_PRE, addr, regstr);
@@ -124,7 +142,10 @@ void code_push_mem(int addr, int offset)
 void code_push_reg(int reg, int mem)
 {
 	char regstr[REGSTR_LENGTH];
-	getregstr(regstr, reg);
+	if(getregstr(regstr, reg) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	if (mem) {
 		sprintf(strbucket, "%s\t%s [%s]", PUSH, VARSIZE, regstr);
@@ -243,7 +264,10 @@ void code_sub_esp(int size)
 void code_test_condition(int reg, int test, int labelno)
 {
 	char regstr[REGSTR_LENGTH];
-	getregstr(regstr, reg);
+	if(getregstr(regstr, reg) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	sprintf(strbucket, "%s\t%s, %d", CMP, regstr, test);
 	output(strbucket);
@@ -256,8 +280,14 @@ void code_op_assign(int target, int source)
 	char t_reg[VARSTR_LENGTH];
 	char s_reg[REGSTR_LENGTH];
 
-	getregstr(s_reg, source);
-	getregstr(t_reg, target);
+	if(getregstr(s_reg, source) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
+	if(getregstr(t_reg, target) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	sprintf(strbucket, "%s\t%s [%s], %s", MOV, VARSIZE, t_reg, s_reg);
 	output(strbucket);
@@ -266,7 +296,10 @@ void code_op_assign(int target, int source)
 int code_get_array_offset(int baseoff, int idxreg, int varlength, int global)
 {
 	char regstr[REGSTR_LENGTH];
-	getregstr(regstr, idxreg);
+	if(getregstr(regstr, idxreg) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	if (global == 0) {	/* general local var */
 		sprintf(strbucket, "%s\t%s, %s", MOV, EBX, EBP);
@@ -301,8 +334,14 @@ int code_op_binary(int v1, int v2, char *op)
 	char regstr1[REGSTR_LENGTH];
 	char regstr2[REGSTR_LENGTH];
 
-	getregstr(regstr1, v1);
-	getregstr(regstr2, v2);
+	if(getregstr(regstr1, v1) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
+	if(getregstr(regstr2, v2) == -1){
+		printf("get regstr error\n");
+		exit(1);
+	}
 
 	int sar = 31;
 
