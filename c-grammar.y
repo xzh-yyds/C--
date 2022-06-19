@@ -68,6 +68,8 @@ extern HashNode *var_global_SorA[HASHSIZE];	/* general local or param *
 %type <nPtr> param params_list params type_specifier
 %type <nPtr> fun_declaration declaration declaration_list
 %type <nPtr> call args arg_list
+%type <nPtr> logical_or_expression logical_and_expression inclusive_or_expression exclusive_or_expression
+%type <nPtr> and_expression assign_expression unary_expression postfix_expression 
 %type <iValue> relop mulop addop
 
 %start program
@@ -297,6 +299,50 @@ var
     ;
 
 simple_expression
+    : logical_or_expression {}
+    ;
+
+logical_or_expression
+    : logical_and_expression {}
+    | logical_or_expression OR_ASSIGN logical_and_expression {
+        printf("logical_or_expression is not allowed\n");
+        exit(1);
+    }
+    ;
+
+logical_and_expression
+    : inclusive_or_expression {}
+    | logical_and_expression AND_ASSIGN inclusive_or_expression
+    {
+        printf("logical_and_expression is not allowed\n");
+        exit(1);
+    }
+    ;
+
+inclusive_or_expression
+    : exclusive_or_expression {}
+    | inclusive_or_expression '|' exclusive_or_expression {
+        printf("inclusive_or_expression is not allowed\n");
+        exit(1);
+    }
+    ;
+
+exclusive_or_expression
+    : and_expression {}
+    | exclusive_or_expression '^' and_expression {
+        printf("exclusive_or_expression is not allowed\n");
+        exit(1);
+    }
+    ;
+and_expression
+    : assign_expression {}
+    | and_expression '&' assign_expression {
+        printf("and_expression is not allowed\n");
+        exit(1);
+    }
+    ;
+
+assign_expression
     : additive_expression relop additive_expression
         {
             $$ = createNode($2, 2, $1, $3); 
@@ -377,6 +423,35 @@ factor
     | var { $$ = $1; }
     | call { $$ = $1; }
     | CONSTANT { $$ = set_content($1); }
+    | unary_expression {}
+    ;
+
+
+unary_expression
+    : postfix_expression {}
+    | '!' unary_expression {
+        printf("! is not allowed\n");
+        exit(1);
+    }
+    | INC_OP unary_expression {
+        printf("INC_OP is not allowed\n");
+        exit(1);
+    } 
+    | DEC_OP unary_expression {
+        printf("DEC_OP is not allowed\n");
+        exit(1);
+    }
+    ;
+
+postfix_expression
+    : var INC_OP {
+        printf("postfix_expression is not allowed\n");
+        exit(1);
+    }
+    | var DEC_OP {
+        printf("postfix_expression is not allowed\n");
+        exit(1);
+    }
     ;
 
 call
