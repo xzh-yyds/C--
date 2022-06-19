@@ -11,16 +11,17 @@
 unsigned int ELFHash(const char *str, unsigned int len)
 {
 	unsigned int hash = 0;
-	unsigned int x = 0;
-	unsigned int i = 0;
-	for (i = 0; i < len; str++, i++) {
-		hash = (hash << 4) + (*str);
-		if ((x = hash & 0xF0000000L) != 0) {
-			hash ^= (x >> 24);
+	unsigned int g = 0;
+	while(*str){
+		hash = (hash << 4) + *str;
+		g = hash & 0xf0000000L;
+		if(g != 0){
+			hash ^= (g >> 24);
+			hash &= ~g;
 		}
-		hash &= ~x;
+		str++;
 	}
-	return hash;
+	return (hash & 0x7fffffff);
 }
 
 static void hash_freenode(HashNode * node)

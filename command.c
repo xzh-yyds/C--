@@ -7,10 +7,6 @@
 
 char strbucket[MAX_STR_LENGTH];
 char *getregs[5] = { "0", EAX, EBX, ECX, EDX };
-void output(const char *str)
-{
-	printf("%s\n", str);
-}
 
 static int func_is_main(int funcname)
 {
@@ -47,13 +43,13 @@ int creat_label()
 void code_label(int labelno)
 {
 	sprintf(strbucket, "%s%d:", LABEL, labelno);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_jmp(int labelno)
 {
 	sprintf(strbucket, "%s\t%s%d", JMP, LABEL, labelno);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_pop(int reg)
@@ -65,7 +61,7 @@ void code_pop(int reg)
 	}
 
 	sprintf(strbucket, "%s\t%s", POP, regstr);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_lea_global(int target, int addr, int offset)
@@ -87,7 +83,7 @@ void code_lea_global(int target, int addr, int offset)
 		sprintf(strbucket, "%s\t%s, [%s%d+%s]", LEA, tarreg, GDATA_PRE,
 			addr, offreg);
 	}
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_lea_local(int target, int var)
@@ -102,7 +98,7 @@ void code_lea_local(int target, int var)
 	getvarstr(s_var, var);
 
 	sprintf(strbucket, "%s\t%s, %s", LEA, t_reg, s_var);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_move_reg(int target, int source)
@@ -123,7 +119,7 @@ void code_move_reg(int target, int source)
 	}
 
 	sprintf(strbucket, "%s\t%s, %s", MOV, t_reg, s_reg);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_push_mem(int addr, int offset)
@@ -136,7 +132,7 @@ void code_push_mem(int addr, int offset)
 
 	sprintf(strbucket, "%s\t%s [%s%d+%s]", PUSH, VARSIZE,
 		GDATA_PRE, addr, regstr);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_push_reg(int reg, int mem)
@@ -152,7 +148,7 @@ void code_push_reg(int reg, int mem)
 	} else {
 		sprintf(strbucket, "%s\t%s %s", PUSH, VARSIZE, regstr);
 	}
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_push_ind(int idx)
@@ -160,13 +156,13 @@ void code_push_ind(int idx)
 	char varstr[VARSTR_LENGTH];
 	getvarstr(varstr, idx);
 	sprintf(strbucket, "%s\t%s %s", PUSH, VARSIZE, varstr);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_push_cons(int constant)
 {
 	sprintf(strbucket, "%s\t%s %d", PUSH, VARSIZE, constant);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_push_global_var(int var, int offset)
@@ -178,19 +174,19 @@ void code_push_global_var(int var, int offset)
 		sprintf(strbucket, "%s\t%s [%s%d%d]", PUSH, VARSIZE, GDATA_PRE,
 			var, offset);
 	}
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_push_global_array(int var)
 {
 	sprintf(strbucket, "%s\t%s %s%d", PUSH, VARSIZE, GDATA_PRE, var);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_call_func(int funcname)
 {
 	sprintf(strbucket, "%s\t%s%d", CALLF, FUNC_PRE, funcname);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_start_bss()
@@ -199,7 +195,7 @@ void code_start_bss()
 
 	if (!bss_mark) {
 		strcpy(strbucket, "section .bss");
-		output(strbucket);
+		printf("%s\n", strbucket);
 		++bss_mark;
 	}
 }
@@ -210,7 +206,7 @@ void code_start_text()
 
 	if (!text_mark) {
 		strcpy(strbucket, "section .text");
-		output(strbucket);
+		printf("%s\n", strbucket);
 		++text_mark;
 	}
 }
@@ -219,7 +215,7 @@ void code_declare_global_var(int varname, int size)
 {
 	sprintf(strbucket, "%s%d:\t%s %d", GDATA_PRE, varname,
 		GLOBAL_VAR_DEFINE, GLOBAL_VAR_LENGTH * size);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_start_func(int funcname)
@@ -230,26 +226,26 @@ void code_start_func(int funcname)
 		sprintf(strbucket, "global %s%d\n%s%d:", FUNC_PRE, funcname,
 			FUNC_PRE, funcname);
 	}
-	output(strbucket);
+	printf("%s\n", strbucket);
 	sprintf(strbucket, "%s\t%s", PUSH, EBP);
-	output(strbucket);
+	printf("%s\n", strbucket);
 	sprintf(strbucket, "%s\t%s, %s", MOV, EBP, ESP);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_clean_stack(int height)
 {
 	sprintf(strbucket, "%s\t%s, %d", ADD, ESP, height);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_end_func(int funcname)
 {
 	sprintf(strbucket, "%s", LEAVE);
-	output(LEAVE);
+	printf("%s\n", LEAVE);
 
 	if (!func_is_main(funcname)) {
-		output(RET);
+		printf("%s\n", RET);
 	} else {
 		code_end_main();
 	}
@@ -258,7 +254,7 @@ void code_end_func(int funcname)
 void code_sub_esp(int size)
 {
 	sprintf(strbucket, "%s\t%s, %d", SUB, ESP, size);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_test_condition(int reg, int test, int labelno)
@@ -270,9 +266,9 @@ void code_test_condition(int reg, int test, int labelno)
 	}
 
 	sprintf(strbucket, "%s\t%s, %d", CMP, regstr, test);
-	output(strbucket);
+	printf("%s\n", strbucket);
 	sprintf(strbucket, "%s\t%s%d", JE, LABEL, labelno);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 void code_op_assign(int target, int source)
@@ -290,7 +286,7 @@ void code_op_assign(int target, int source)
 	}
 
 	sprintf(strbucket, "%s\t%s [%s], %s", MOV, VARSIZE, t_reg, s_reg);
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 int code_get_array_offset(int baseoff, int idxreg, int varlength, int global)
@@ -303,26 +299,26 @@ int code_get_array_offset(int baseoff, int idxreg, int varlength, int global)
 
 	if (global == 0) {	/* general local var */
 		sprintf(strbucket, "%s\t%s, %s", MOV, EBX, EBP);
-		output(strbucket);
+		printf("%s\n", strbucket);
 	} else if (global == -1) {	/* parameter */
 		/* the array position in memory */
 		sprintf(strbucket, "%s\t%s, [%s+%d]", MOV, EBX, EBP, baseoff);
-		output(strbucket);
+		printf("%s\n", strbucket);
 	} else {		/* global var, just calculate the array index offset */
 		sprintf(strbucket, "%s\t%s, 0", MOV, EBX);
-		output(strbucket);
+		printf("%s\n", strbucket);
 	}
 
 	/* get the array index offset */
 	sprintf(strbucket, "%s\t%s, %d", IMUL, regstr, varlength);
-	output(strbucket);
+	printf("%s\n", strbucket);
 
 	sprintf(strbucket, "%s\t%s, %s", ADD, EBX, EAX);
-	output(strbucket);
+	printf("%s\n", strbucket);
 
 	if (global == 0) {
 		sprintf(strbucket, "%s\t%s, %d", SUB, EBX, abs(baseoff));
-		output(strbucket);
+		printf("%s\n", strbucket);
 	}
 
 	return 2;		/* store in ebx */
@@ -357,14 +353,14 @@ int code_op_binary(int v1, int v2, char *op)
 
 	} else if (strcmp(op, "/") == 0) {
 		sprintf(strbucket, "%s\t%s, %s", MOV, EDX, regstr1);
-		output(strbucket);
+		printf("%s\n", strbucket);
 		sprintf(strbucket, "%s\t%s, %d", SAR, EDX, sar);
-		output(strbucket);
+		printf("%s\n", strbucket);
 		sprintf(strbucket, "%s\t%s", IDIV, regstr2);
 
 	} else {		/* relop */
 		sprintf(strbucket, "%s\t%s, %s", CMP, regstr1, regstr2);
-		output(strbucket);
+		printf("%s\n", strbucket);
 
 		if (strcmp(op, "==") == 0) {
 			sprintf(strbucket, "%s\t%s", SETE, AL);
@@ -385,11 +381,11 @@ int code_op_binary(int v1, int v2, char *op)
 			sprintf(strbucket, "%s\t%s", SETLE, AL);
 		}
 
-		output(strbucket);
+		printf("%s\n", strbucket);
 		sprintf(strbucket, "%s\t%s, %s", MOVZX, EAX, AL);
 	}
 
-	output(strbucket);
+	printf("%s\n", strbucket);
 
 	return 1;		/* return which reg it stores the result */
 }
@@ -400,11 +396,11 @@ int code_data_section()
 
 	if (!data_mark) {
 		strcpy(strbucket, "section .data");
-		output(strbucket);
+		printf("%s\n", strbucket);
 		strcpy(strbucket, "numbers db \"0123456789\", 0xA");
-		output(strbucket);
+		printf("%s\n", strbucket);
 		strcpy(strbucket, "inputchar db 0");
-		output(strbucket);
+		printf("%s\n", strbucket);
 
 		++data_mark;
 		return 0;
@@ -419,23 +415,23 @@ void code_func_output()
 	/*code_start_func(); */
 	strcpy(strbucket,
 	       "sub esp, 4\nmov dword [ebp-4], 0\njmp G2\nG1:\nadd dword [ebp-4], 1\npush edx");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "G2:\nmov edx, 0\nmov eax, [ebp+8]\nmov ebx, 10\ndiv ebx\nmov [ebp+8], eax");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "cmp eax, 0\njnz G1\npush edx\nadd dword [ebp-4], 1\njmp G3");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "G4:\nsub dword [ebp-4], 1\npop edx\nmov eax, 4\nmov ebx, 1\nmov ecx, numbers");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket, "add ecx, edx\nmov edx, 1\nint 80h");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "G3:\ncmp dword [ebp-4], 0\njnz G4\nmov eax, 4\nmov ebx, 1\nlea ecx, [numbers+10]");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket, "mov edx, 1\nint 80h");
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 /* input function */
@@ -443,23 +439,23 @@ void code_func_input()
 {
 	strcpy(strbucket,
 	       "sub esp, 4\nmov dword [ebp-4], 0\nmov byte [inputchar], 0\njmp G6");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "G5:\nmov dword eax, [ebp-4]\nmov ebx, 10\nmul ebx\nxor ecx, ecx");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "mov byte cl, [inputchar]\nsub ecx, 48\nadd eax, ecx\nmov dword [ebp-4], eax");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "G6:\nmov eax, 03h\nmov ebx, 00h\nmov ecx, inputchar\nmov edx, 01h");
-	output(strbucket);
+	printf("%s\n", strbucket);
 	strcpy(strbucket,
 	       "int 80h\ncmp byte [inputchar], 0ah\njne G5\nmov dword eax, [ebp-4]");
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
 
 static void code_end_main()
 {
 	sprintf(strbucket, "mov ebx, eax\nmov eax,1\nint 80h");
-	output(strbucket);
+	printf("%s\n", strbucket);
 }
