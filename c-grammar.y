@@ -105,6 +105,11 @@ var_declaration
             tmp2 = set_content($4);
             $$ = createNode(VAR, 3, $1, tmp1, tmp2);
         }
+    | type_specifier error ';'
+        {
+            printf("C--:error Definition of variate;\n");
+            exit(1);
+        }
     ;
 
 type_specifier
@@ -132,6 +137,11 @@ params
 params_list
     : params_list ',' param { $$ = createNode(',', 2, $1, $3); }
     | param { $$ = $1; }
+    | params_list error param 
+    {
+        printf("C--:disappear ',' in function declaration;\n");
+        exit(1);
+    }
     ;
 
 param
@@ -149,11 +159,26 @@ param
             tmp1 = set_index($2);
             $$ = createNode(PARAM, 3, $1, tmp1, NULL);
         }
+    | type_specifier IDENTIFIER error
+        {
+            printf("C--:error declaration of function params;\n");
+            exit(1);
+        }
+    | type_specifier error 
+        {
+            printf("C--:error declaration of function params;\n");
+            exit(1);
+        }
     ;
 
 compound_stmt
     : '{' local_declarations statement_list '}' 
         { $$ = createNode('{', 2, $2, $3); }
+    | '{' local_declarations statement_list error
+        {
+            printf("C--:disappear '}' for the function body;\n");
+            exit(1);
+        }
     ;
 
 local_declarations
@@ -183,15 +208,74 @@ selection_stmt
     : IF '(' expression ')' statement { $$ = createNode(IF, 2, $3, $5); }
     | IF '(' expression ')' statement ELSE statement
         { $$ = createNode(IF, 3, $3, $5, $7); }
+    | IF error statement ELSE statement 
+    {
+        printf("C--:disappear boolean statement;\n");
+        exit(1);
+    }
+    | IF error statement
+    {
+        printf("C--:disappear boolean statement;\n");
+        exit(1);
+    }
+    | IF '(' error ')' statement
+    {
+        printf("C--:disappear boolean statement;\n");
+        exit(1);
+    }
+    | IF '(' error statement ELSE statement
+    {
+        printf("C--:disappear boolean statement and ')';\n");
+        exit(1);
+    }
+    | IF '(' expression ')' error ELSE statement
+    {
+        printf("C--:disappear IF statement;\n");
+        exit(1);
+    }
+    | IF '(' expression ')' error
+    {
+        printf("C--:disappear IF statement;\n");
+        exit(1);
+    }
+    | IF '(' expression ')' statement ELSE error 
+    {
+        printf("C--:disappear ELSE statement;\n");
+        exit(1);
+    }
     ;
 
 iteration_stmt
     : WHILE '(' expression ')' statement { $$ = createNode(WHILE, 2, $3, $5); }
+    | FOR '(' expression_stmt ')' statement {
+        printf("FOR iteration is not allowed!\n");
+        exit(1);
+    }
+    | WHILE error statement 
+    {
+        printf("C--:disappear while boolean statement;\n");
+        exit(1);
+    }
+    | WHILE '(' expression ')' error 
+    {
+        printf("C--:disappear while statement;\n");
+        exit(1);
+    }
     ;
 
 return_stmt
     : RETURN ';' { $$ = createNode(RETURN, 0); }
     | RETURN expression ';' { $$ = createNode(RETURN, 1, $2); }
+    | RETURN error ';'
+        {
+            printf("C--:error return statement;\n");
+            exit(1);
+        }
+    | RETURN error
+        {
+            printf("C--:error return statement;\n");
+            exit(1);
+        }
     ;
 
 expression
@@ -218,6 +302,16 @@ simple_expression
             $$ = createNode($2, 2, $1, $3); 
         }
     | additive_expression { $$ = $1; }
+    | error relop additive_expression
+        {
+            printf("C--:disappear compare statement;\n");
+            exit(1);
+        }
+    | additive_expression relop error
+        {
+            printf("C--:disappear compare statement;\n");
+            exit(1);
+        }
     ;
 
 relop
@@ -238,6 +332,16 @@ additive_expression
         { 
             $$ = $1;
         }
+    | additive_expression error term 
+    {
+        printf("C--:disappear '/' or '*' or ' '+' or '-' statement;\n");
+        exit(1);
+    } 
+    | additive_expression addop error 
+    {
+        printf("C--:disappear statement;\n");
+        exit(1);
+    }
     ;
 
 addop
@@ -251,6 +355,16 @@ term
             $$ = createNode($2, 2, $1, $3);
         }
     | factor { $$ = $1; }
+    | term error factor
+    {
+        printf("C--:disappear '/' or '* or '+' or '-' statement;\n");
+        exit(1);
+    }
+    | term mulop error
+    {
+        printf("C--:disappear statement;\n");
+        exit(1);
+    }
     ;
 
 mulop
@@ -272,6 +386,21 @@ call
             tmp1 = set_index($1);
             $$ = createNode(CALL, 2, tmp1, $3);
         }
+    | IDENTIFIER error args ')' 
+        { 
+           printf("C--:disappear '(' statement;\n");
+           exit(1);
+        }
+    | IDENTIFIER error args 
+        {
+           printf("C--:disappear '(' and ')' statement;\n");
+           exit(1);
+        }
+    | IDENTIFIER '(' args error 
+        {
+           printf("C--:disappear ')' statement;\n");
+           exit(1);
+        }
     ;
 
 args
@@ -282,6 +411,16 @@ args
 arg_list
     : arg_list ',' expression { $$ = createNode(',', 2, $1, $3); }
     | expression { $$ = $1; }
+    | arg_list error expression 
+        {
+            printf("C--:incorrent function arg_list;\n");
+            exit(1);
+        }
+    | error ',' expression 
+        {
+            printf("C--:incorrent function arg_list;\n");
+            exit(1);
+        }
     ;
 
 %%
