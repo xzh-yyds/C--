@@ -6,7 +6,7 @@
 #include "hash.h"
 
 char strbucket[MAX_STR_LENGTH];
-
+char *getregs[5] = { "0", EAX, EBX, ECX, EDX };
 void output(const char *str)
 {
 	printf("%s\n", str);
@@ -29,23 +29,13 @@ static void getvarstr(char *varstr, int offset)
 }
 
 static int getregstr(char *regstr, int reg)
-{
-	switch (reg) {
-	case 1:
-		strcpy(regstr, EAX);
+{	
+	if(reg >= 1 && reg <= 4){
+		strcpy(regstr, getregs[reg]);
 		return 0;
-	case 2:
-		strcpy(regstr, EBX);
-		return 0;
-	case 3:
-		strcpy(regstr, ECX);
-		return 0;
-	case 4:
-		strcpy(regstr, EDX);
-		return 0;
+	}else{
+		return -1;
 	}
-
-	return -1;
 }
 
 int creat_label()
