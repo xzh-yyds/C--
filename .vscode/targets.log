@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jun 18 18:38:06 2022
+# Make data base, printed on Sun Jun 19 21:38:14 2022
 
 # Variables
 
@@ -25,7 +25,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-7654aea7-2fab-4f3c-be1f-edb8dda8f0de.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-8b52c8e3-1834-4b62-b173-f9bc4bbfc8c2.sock
 # environment
 LC_NAME = zh_CN.UTF-8
 # environment
@@ -67,7 +67,7 @@ VSCODE_CODE_CACHE_PATH = /home/lightning/.config/Code/CachedData/30d9c6cd9483b2c
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.JAOXN1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.3CGGN1
 # default
 .LOADED := 
 # default
@@ -111,7 +111,7 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 6625
+VSCODE_PID = 2824
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -121,7 +121,7 @@ BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
 CONDA_PYTHON_EXE = /home/lightning/anaconda3/bin/python
 # environment
-SESSION_MANAGER = local/lightning-virtual-machine:@/tmp/.ICE-unix/2076,unix/lightning-virtual-machine:/tmp/.ICE-unix/2076
+SESSION_MANAGER = local/lightning-virtual-machine:@/tmp/.ICE-unix/2078,unix/lightning-virtual-machine:/tmp/.ICE-unix/2078
 # automatic
 *F = $(notdir $*)
 # environment
@@ -171,7 +171,7 @@ LC_TIME = zh_CN.UTF-8
 # environment
 SNAP = /snap/code/99
 # environment
-INVOCATION_ID = f6e8ddf6e619481d85e1d05c38faabb4
+INVOCATION_ID = a9d5a17466c44c82834c34f1d6215770
 # environment
 SNAP_REVISION = 99
 # environment
@@ -200,7 +200,6 @@ DESKTOP_SESSION = ubuntu
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # 'override' directive
 GNUMAKEFLAGS := 
- 
 # environment
 CONDA_DEFAULT_ENV = base
 # environment
@@ -212,7 +211,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := make
 # environment
-SYSTEMD_EXEC_PID = 2095
+SYSTEMD_EXEC_PID = 2099
 # environment
 DISPLAY = :0
 # environment
@@ -232,7 +231,7 @@ MANAGERPID = 1985
 # environment
 LC_MEASUREMENT = zh_CN.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 6579
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2779
 # environment
 _ = /snap/code/99/usr/share/code/code
 # environment
@@ -244,7 +243,7 @@ GDK_PIXBUF_MODULE_FILE = /home/lightning/snap/code/common/.cache/gdk-pixbuf-load
 # environment
 _CE_M = 
 # environment
-JOURNAL_STREAM = 8:35287
+JOURNAL_STREAM = 8:51357
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -280,6 +279,7 @@ SNAP_COMMON = /var/snap/code/common
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
+ 
 SNAP_USER_DATA = /home/lightning/snap/code/99
 # environment
 XDG_MENU_PREFIX = gnome-
@@ -302,9 +302,9 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 2051, inode 3821807): 23 files, no impossibilities.
+# . (device 2051, inode 3821807): 18 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 18 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -317,7 +317,7 @@ make: parser
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 2):
-	./parser < test/test2.c > testfile.asm
+	./parser < test/test1.c > testfile.asm
 	nasm -f elf -g -F stabs testfile.asm -o testfile.o
 	ld -m elf_i386 -o testfile testfile.o
 
@@ -408,7 +408,7 @@ lex.yy.c:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-18 18:37:46.759572331
+#  Last modified 2022-06-19 21:38:13.476468534
 #  File has been updated.
 #  Successfully updated.
 
@@ -426,12 +426,12 @@ command.c:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 31 / storage = 256 B / avg = 8 B
-# current buf: size = 8162 B / used = 256 B / count = 31 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 30 / storage = 244 B / avg = 8 B
+# current buf: size = 8162 B / used = 244 B / count = 30 / avg = 8 B
 
-# strcache performance: lookups = 54 / hit rate = 42%
+# strcache performance: lookups = 49 / hit rate = 38%
 # hash-table stats:
-# Load=31/8192=0%, Rehash=0, Collisions=0/54=0%
-# Finished Make data base on Sat Jun 18 18:38:06 2022
+# Load=30/8192=0%, Rehash=0, Collisions=0/49=0%
+# Finished Make data base on Sun Jun 19 21:38:14 2022
 
  

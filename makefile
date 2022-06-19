@@ -1,5 +1,5 @@
 make: parser
-	./parser < test/test2.c > testfile.asm
+	./parser < test/test1.c > testfile.asm
 	nasm -f elf -g -F stabs testfile.asm -o testfile.o
 	ld -m elf_i386 -o testfile testfile.o
 

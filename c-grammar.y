@@ -433,11 +433,11 @@ unary_expression
         printf("! is not allowed\n");
         exit(1);
     }
-    | INC_OP unary_expression {
+    | INC_OP var {
         printf("INC_OP is not allowed\n");
         exit(1);
     } 
-    | DEC_OP unary_expression {
+    | DEC_OP var {
         printf("DEC_OP is not allowed\n");
         exit(1);
     }
