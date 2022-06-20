@@ -6,8 +6,6 @@
 #include "hash.h"
 
 char strbucket[MAX_STR_LENGTH];
-char *getregs[5] = { "0", EAX, EBX, ECX, EDX };
-
 static int func_is_main(int funcname)
 {
 	if (funcname == ELFHash("main", 4))
@@ -15,6 +13,8 @@ static int func_is_main(int funcname)
 
 	return 0;
 }
+
+char *getregs[5] = { "0", EAX, EBX, ECX, EDX };
 
 static void getvarstr(char *varstr, int offset)
 {

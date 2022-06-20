@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jun 19 21:38:14 2022
+# Make data base, printed on Mon Jun 20 13:44:16 2022
 
 # Variables
 
@@ -25,7 +25,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-8b52c8e3-1834-4b62-b173-f9bc4bbfc8c2.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-4a1fb50f-1160-4390-bb60-f8fbf5d1312e.sock
 # environment
 LC_NAME = zh_CN.UTF-8
 # environment
@@ -67,7 +67,7 @@ VSCODE_CODE_CACHE_PATH = /home/lightning/.config/Code/CachedData/30d9c6cd9483b2c
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.3CGGN1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.4LVDO1
 # default
 .LOADED := 
 # default
@@ -111,7 +111,7 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 2824
+VSCODE_PID = 2818
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -171,7 +171,7 @@ LC_TIME = zh_CN.UTF-8
 # environment
 SNAP = /snap/code/99
 # environment
-INVOCATION_ID = a9d5a17466c44c82834c34f1d6215770
+INVOCATION_ID = 68017ddd8c9447f28d7941bdc2cda80b
 # environment
 SNAP_REVISION = 99
 # environment
@@ -211,7 +211,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := make
 # environment
-SYSTEMD_EXEC_PID = 2099
+SYSTEMD_EXEC_PID = 2105
 # environment
 DISPLAY = :0
 # environment
@@ -227,11 +227,11 @@ SNAP_DATA = /var/snap/code/99
 # environment
 SNAP_CONTEXT = 9SWwfHbDljaKDglhmv3Q_S5kLAvgTLLfXZwq635MqS7oST250ACZ
 # environment
-MANAGERPID = 1985
+MANAGERPID = 1986
 # environment
 LC_MEASUREMENT = zh_CN.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 2779
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2773
 # environment
 _ = /snap/code/99/usr/share/code/code
 # environment
@@ -243,7 +243,7 @@ GDK_PIXBUF_MODULE_FILE = /home/lightning/snap/code/common/.cache/gdk-pixbuf-load
 # environment
 _CE_M = 
 # environment
-JOURNAL_STREAM = 8:51357
+JOURNAL_STREAM = 8:36811
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -279,11 +279,11 @@ SNAP_COMMON = /var/snap/code/common
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
- 
 SNAP_USER_DATA = /home/lightning/snap/code/99
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
+ 
 CONDA_EXE = /home/lightning/anaconda3/bin/conda
 # environment
 _CE_CONDA = 
@@ -317,7 +317,7 @@ make: parser
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 2):
-	./parser < test/test1.c > testfile.asm
+	./parser < test/error4.c > testfile.asm
 	nasm -f elf -g -F stabs testfile.asm -o testfile.o
 	ld -m elf_i386 -o testfile testfile.o
 
@@ -408,7 +408,7 @@ lex.yy.c:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-19 21:38:13.476468534
+#  Last modified 2022-06-19 23:22:59.005133812
 #  File has been updated.
 #  Successfully updated.
 
@@ -432,6 +432,6 @@ command.c:
 # strcache performance: lookups = 49 / hit rate = 38%
 # hash-table stats:
 # Load=30/8192=0%, Rehash=0, Collisions=0/49=0%
-# Finished Make data base on Sun Jun 19 21:38:14 2022
+# Finished Make data base on Mon Jun 20 13:44:16 2022
 
  

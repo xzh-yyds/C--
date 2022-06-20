@@ -19,7 +19,6 @@ int exeNode(Node *p, int signal);
 int yylexeNode(void);
 void yyerror(char *s);
 void hash_init(HashNode * table[], int size);
-void printTree(Node *node);
 
 extern char* yytext;
 extern int col;
@@ -76,7 +75,7 @@ extern HashNode *var_global_SorA[HASHSIZE];	/* general local or param *
 %%
 
 program
-    : declaration_list { exeNode($1, 0); printTree($1); freeNode($1); }
+    : declaration_list { exeNode($1, 0); freeNode($1); }
     ;
 
 declaration_list
@@ -556,10 +555,6 @@ Node *createNode(int name, int num, ...)
 		
 	va_end(valist);
 	return p;
-}
-
-void printTree(Node *node){
-    printf("node");
 }
 
 void freeNode(Node *p) 

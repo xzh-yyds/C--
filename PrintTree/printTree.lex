@@ -142,3 +142,5 @@ void countColumn()
 	}
 	//printf("The column is %d The row is %d The sign is %s\n",column,row,yytext);
 }
+
+

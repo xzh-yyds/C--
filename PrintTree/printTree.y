@@ -1,14 +1,16 @@
 %{
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include "node.h"
 #include "queue.h"
-#include "hash.h"
-#include "asm.h"
 int yydebug =1;
 Node *tmp;
 Node* Tree;
+
+extern int yylex(void);
+
 /* 属性操作类型 */
 void freeNode(Node *p);
 int exeNode(Node *p, int signal, int* calling_func);
@@ -20,6 +22,7 @@ Node* set_oprNode(LexNode lex,int num,int name);
 Node* set_typeNode(LexNode lex,int type);
 Node* set_constantNode(LexNode lex);
 Node* set_indexNode(LexNode lex);
+Node* root = NULL;
 %}
 
 %union {
@@ -50,16 +53,8 @@ Node* set_indexNode(LexNode lex);
 
 program
     : declaration_list {
-        if (hasError == 1)
-        {
-           ret2cons();
-        }
-        else{
-            int calling_func = -1;
-            init_func();
-            exeNode($1, 0, &calling_func);
-            bss_global_variable(HASH_SIZE);
-        }
+        printf("tree\n");
+        PrintTree($1, 0);
     }
     ;
 
@@ -565,33 +560,13 @@ int main(int argc, char* argv[])
     strcpy(asmoutput, c); asmoutput[len-2] = '.'; asmoutput[len-1] = 's'; asmoutput[len] = '\0';
     freopen(asmoutput, "w", stdout);
 
-    hash_init(var_local, HASH_SIZE);
-    hash_init(var_global, HASH_SIZE);
-    hash_init(funcs, HASH_SIZE);
-    // hash_init(var_local_SorA, HASHSIZE);
-    // hash_init(var_local_GorP, HASHSIZE);
     yyparse();
-    if (hasError == 1)
-    return 0;
-    
-    freopen("/dev/tty", "w", stdout);
-    freopen("/dev/tty", "r", stdin);
-    pid_t pid = fork();
-    if (pid == 0) {
-        execlp("nasm", "nasm", "-f elf64", asmoutput, NULL);
-    } else {
-        wait();
-        asmoutput[len-1] = 'o';
-        char* elf = (char*)malloc(sizeof(char)*(len-1));
-        memcpy(elf, argv[1], len-2); elf[len-2] = '\0';
-        pid = fork();
-        if (pid == 0) {
-            execlp("ld", "ld", "-o", elf, asmoutput, NULL);
-        } else {
-            wait();
-            execlp("rm", "rm", asmoutput, NULL);
-        }
-    }
-
     return 0;
 }
+
+
+
+
+
+
+
